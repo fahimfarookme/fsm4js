@@ -1,0 +1,23 @@
+{
+   "name": "fsm4js",
+   "version": "0.0.1",
+   "src": "src",
+   "test": "test",
+   "dist": "dist",
+   "temp": ".tmp",
+   "browserSync": {
+      "testPort": 9998,
+      "testHost": "localhost"
+   },
+   "optimize": {
+      "js": {
+         "minify": true,
+         "concat": true
+      }
+   },
+   "concatOrder": [
+      "src/fsm4js-core.js",
+      "src/**/*.js", 
+      "!src/jquery-plugin.js", "src/jquery-plugin.js"
+   ]
+}

@@ -1,0 +1,30 @@
+{
+  "name": "fsm4js",
+  "version": "0.0.1",
+  "description": "A declarative Finite State Machine library for JavaScript",
+  "main": [
+    "dist/fsm4js.min.js"
+  ],
+  "authors": [
+    "Fahim Farook"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "Finite State Machine",
+    "FSM"
+  ],
+  "moduleType": [
+    "globals"
+  ],
+  "homepage": "https://github.com/fahimfarookme/fsm4js",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "^3.2.0"
+  }
+}
