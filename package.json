@@ -37,5 +37,9 @@
     "grunt-text-replace": "^0.4.0",
     "jit-grunt": "^0.9.1",
     "time-grunt": "^1.2.2"
+  },
+  "scripts": {
+    "build": "npm install && grunt package",
+    "test": "grunt test"
   }
 }
