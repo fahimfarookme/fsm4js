@@ -95,8 +95,8 @@ module.exports = function (grunt) {
 
         // replace name and versions on package.json and bower.json
         replace: {
-            project: {
-                src: ["package.json", "bower.json"],
+            version: {
+                src: ["package.json", "bower.json", "<%= config.temp %>/**/*.js"],
                 overwrite: true,
                 replacements: [{
                     from: "@@VERSION",
@@ -146,7 +146,7 @@ module.exports = function (grunt) {
         },
 
         concat: {
-            dist: {
+            target: {
                 // to concat files in order, put them in the required order.
                 // last file must be excluded first.
                 src: ["<%= config.concatOrder %>"],
@@ -242,11 +242,11 @@ module.exports = function (grunt) {
     });
 
     // usage
-    // grunt package               - package for production. Concat and minify based on settings provided in .fsm4jsrx
-    // grunt package --concat      - Overrides settings provided in .fsm4jsrx
-    // grunt package --minify      - Overrides settings provided in .fsm4jsrx
-    // grunt package --no-concat   - Overrides settings provided in .fsm4jsrx
-    // grunt package --no-minify   - Overrides settings provided in .fsm4jsrx
+    // grunt package               - package for production. Concat and minify based on settings provided in .zahrawirc
+    // grunt package --concat      - Overrides settings provided in .zahrawirc
+    // grunt package --minify      - Overrides settings provided in .zahrawirc
+    // grunt package --no-concat   - Overrides settings provided in .zahrawirc
+    // grunt package --no-minify   - Overrides settings provided in .zahrawirc
     grunt.registerTask("package", function () {
         // do configs
         var options = [
@@ -260,22 +260,24 @@ module.exports = function (grunt) {
             if (grunt.option(options[i])) {
                 var opts = options[i].split("-");
 
-                var val = opts[0] !== "no";
+                var val = opts[0] === "no" ? false : true;
                 var type = opts[opts.length - 1]; // js or css
                 var action = opts[opts.length - 2]; // concat or minify
                 config.optimize[type][action] = val;
             }
         }
 
-        var tasks = ["replace", "clean"]; // both .tmp and dist
+        var tasks = ["clean"]; // both .tmp and dist
 
         if (config.optimize.js.concat) {
             tasks.push("concat");
         } else {
-            tasks.push("copy:js_src_temp");
+            tasks.push("copy:js_src_temp"); // 2.a
         }
 
-        if (config.optimize.js.minify) {
+        tasks.push("replace");
+
+        if (config.optimize.js.minify) { // minify
             tasks.push("uglify");
         } else {
             tasks.push("copy:js_temp_dist");

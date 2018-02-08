@@ -1,0 +1,146 @@
+
+body {
+    font-family: monospace;
+}
+
+.clear {
+    clear: both;
+}
+
+.events, .states, .log {
+    margin: 30px;
+    clear: both;
+}
+
+.events {
+    text-align: center;
+}
+
+.events button {
+    padding: 10px;
+    width: 100px;
+}
+
+.fail, .success {
+    font-weight: bold;
+}
+
+.timeout {
+    border: #cacaca solid 1px;
+}
+
+.states, .events {
+    width: 400px;
+}
+
+.closed, .open, .halfopen {
+    width: 100px;
+    height: 100px;
+    line-height: 100px;
+    border: 1px green solid;
+    padding: 0.5px;
+    text-align: center;
+    font-size: larger;
+}
+
+.closed {
+    margin: auto;
+}
+
+.left {
+    float: left;
+    margin: 5px auto 5px 98px !important;
+    width: 17px;
+    height: 100px;
+    padding: 0.5px;
+    border-right: 2px solid black;
+    transform: skew(-45deg);
+    border-top: 2px solid black;
+}
+
+.right {
+    float: right;
+    margin: 5px 113px 5px auto !important;
+    width: 17px;
+    height: 100px;
+    padding: 0.5px;
+    border-right: 2px solid black;
+    transform: skew(45deg);
+    border-bottom: 2px solid black;
+}
+
+.line {
+    float: right;
+    width: 180px;
+    height: 100px;
+    margin-right: 5px;
+}
+
+.line div {
+    width: 94%;
+}
+
+.line-top {
+    border-bottom: 2px solid black;
+    /* line-height: 13px; */
+    height: 13%;
+    text-align: center;
+    transform: skew(45deg);
+    border-right: 2px solid black;
+    margin: 27px 11px 0 0;
+}
+
+.line-bottom {
+    border-top: 2px solid black;
+    height: 13%;
+    text-align: center;
+    transform: skew(45deg);
+    border-left: 2px solid black;
+    margin: 15px 0px 0px 11px;
+}
+
+i {
+    border: solid black;
+    border-width: 0 3px 3px 0;
+    display: inline-block;
+    padding: 4px;
+}
+
+.arrow-right {
+    transform: rotate(-45deg);
+    -webkit-transform: rotate(-45deg);
+}
+
+.arrow-left {
+    transform: rotate(135deg);
+    -webkit-transform: rotate(135deg);
+}
+
+.halfopen {
+    float: left;
+}
+
+.open {
+    float: right;
+}
+
+.active {
+    background: #91c47e;
+    border: 3px green solid !important;
+}
+
+.red {
+    color: red;
+}
+
+.green {
+    color: green;
+}
+
+.italic {
+    font-style: italic;
+}
+
+.log {
+    font-size: 17px;
+}

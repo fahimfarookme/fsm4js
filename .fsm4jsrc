@@ -16,8 +16,7 @@
       }
    },
    "concatOrder": [
-      "src/fsm4js-core.js",
-      "src/**/*.js", 
-      "!src/jquery-plugin.js", "src/jquery-plugin.js"
+      "src/fsm4js-core/fsm4js-core.js",
+      "src/**/*.js"
    ]
 }

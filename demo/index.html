@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>FSM4JS Demo</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="demo.css">
+</head>
+
+<body>
+
+<h2>Finite State Machine for a Circuit Breaker</h2>
+
+<div class="events">
+    <button onclick="fsm.success()">Success</button>
+    <button onclick="fsm.fail()">Fail</button>
+    <button class="timeout" disabled>Timeout</button>
+</div>
+
+<div class="states">
+    <div class="closed">Closed</div>
+    <div>
+        <div class="left"></div>
+        <div class="right"></div>
+        <div class="clear"></div>
+    </div>
+    <div>
+        <div class="open">Open&nbsp;<span class="timer"></span></div>
+        <div class="line">
+            <div class="line-top"></div>
+            <div class="line-bottom"></div>
+        </div>
+        <div class="halfopen">Half Open</div>
+        <div class="clear"></div>
+    </div>
+    <div class="clear"></div>
+</div>
+
+<div class="log">
+
+</div>
+
+<script type="text/javascript" src="../dist/fsm4js.min.js"></script>
+<script type="text/javascript">
+
+    var util = (function () {
+        return {
+            onOpenState: function () {
+                var secs = 5000;
+                $(".timer").html(secs / 1000);
+
+                var fn = function (time) {
+                    if (time <= 0) {
+                        $(".timer").html("");
+                        fsm.timeout();
+                        return;
+                    }
+                    setTimeout(function () {
+                        time -= 1000;
+                        $(".timer").html(time / 1000);
+                        fn(time);
+                    }, 1000);
+                };
+
+                fn(secs);
+            },
+
+            onTransition: function (data) {
+                data.from && $("." + data.from.state.toLowerCase()).removeClass("active");
+                data.to && $("." + data.to.state.toLowerCase()).addClass("active");
+                $(".log").append("<p>State transitioned from <span class='red'>" + (data.from ? data.from.state : "init") +
+                    "</span> to <span class='green'>" + data.to.state +
+                    "</span> due to <u><span class='italic'>" + (data.event || "start") + "</span></u> event.</p>");
+            }
+        };
+    })();
+
+    var fsm = FSM4JS.fsm()
+        .events(["success", "fail", "timeout"])
+        .states(["closed", "open", "halfopen"])
+        .init("closed")
+        .transitions([
+            {from: "closed",   event: "success", to: "closed"},
+            {from: "closed",   event: "fail",    to: "open"},
+            {from: "open",     event: "timeout", to: "halfopen"},
+            {from: "halfopen", event: "success", to: "closed"},
+            {from: "halfopen", event: "fail",    to: "open"}
+        ])
+        .on("open", {
+            enter: function () {
+                util.onOpenState();
+            }
+        })
+        .afterExit(function (data) {
+            util.onTransition(data);
+        })
+        .start();
+
+</script>
+</body>
+
+</html>

@@ -11,7 +11,8 @@
   "license": "MIT",
   "keywords": [
     "Finite State Machine",
-    "FSM"
+    "FSM",
+	"FSM4JS"
   ],
   "moduleType": [
     "globals"
@@ -25,6 +26,5 @@
     "tests"
   ],
   "dependencies": {
-    "jquery": "^3.2.0"
   }
 }
