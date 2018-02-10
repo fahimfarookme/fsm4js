@@ -12,7 +12,7 @@
   "keywords": [
     "Finite State Machine",
     "FSM",
-	"FSM4JS"
+    "FSM4JS"
   ],
   "moduleType": [
     "globals"

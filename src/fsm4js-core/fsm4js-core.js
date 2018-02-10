@@ -24,27 +24,27 @@
 
 if (typeof FSM4JS === "undefined") {
 
-    /**
-     * The FSM4JS global namespace object.  If FSM4JS is already defined, the
-     * existing FSM4JS object will not be overridden so that defined
-     * namespaces are preserved.
-     */
-    var FSM4JS = {};
+	/**
+	 * The FSM4JS global namespace object.  If FSM4JS is already defined, the
+	 * existing FSM4JS object will not be overridden so that defined
+	 * namespaces are preserved.
+	 */
+	var FSM4JS = {};
 }
 
 (function (fsm4js) {
 
 
-    fsm4js.version = "@@VERSION";
+	fsm4js.version = "@@VERSION";
 
-    /**
-     * Creates a new Finite State Machine.
-     *
-     * @returns {fsm4js._builder}
-     */
-    fsm4js.fsm = function () {
-        var parent = Object.create(fsm4js._builder.prototype);
-        return this._builder.apply(parent, arguments) || parent;
-    }
+	/**
+	 * Creates a new Finite State Machine.
+	 *
+	 * @returns {fsm4js._builder}
+	 */
+	fsm4js.fsm = function () {
+		var parent = Object.create(fsm4js._builder.prototype);
+		return this._builder.apply(parent, arguments) || parent;
+	}
 
 })(FSM4JS);
