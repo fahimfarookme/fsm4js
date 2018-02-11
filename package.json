@@ -4,7 +4,8 @@
   "description": "A declarative Finite State Machine library for JavaScript",
   "main": "fsm4js.min.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "npm install && grunt package",
+    "test": "grunt test --coverage"
   },
   "repository": {
     "type": "git",
@@ -22,24 +23,25 @@
   "homepage": "https://github.com/fahimfarookme/fsm4js",
   "devDependencies": {
     "autoprefixer": "^6.7.7",
+    "chai": "^4.1.2",
     "eslint": "^2.2.0",
     "grunt": "^0.4.5",
-    "grunt-browser-sync": "^2.1.2",
     "grunt-concurrent": "^1.0.0",
     "grunt-contrib-clean": "^0.6.0",
     "grunt-contrib-concat": "^0.5.1",
     "grunt-contrib-copy": "^0.8.2",
     "grunt-contrib-uglify": "^0.10.0",
-    "grunt-contrib-watch": "^0.6.1",
     "grunt-eslint": "^17.3.1",
-    "grunt-mocha": "^0.4.13",
+    "grunt-karma": "^2.0.0",
     "grunt-newer": "^1.1.1",
     "grunt-text-replace": "^0.4.0",
     "jit-grunt": "^0.9.1",
+    "karma": "^2.0.0",
+    "karma-chai": "^0.1.0",
+    "karma-coverage": "^1.1.1",
+    "karma-mocha": "^1.3.0",
+    "karma-phantomjs-launcher": "^1.0.4",
+    "mocha": "^5.0.0",
     "time-grunt": "^1.2.2"
-  },
-  "scripts": {
-    "build": "npm install && grunt package",
-    "test": "grunt test"
   }
 }

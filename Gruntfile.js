@@ -169,43 +169,6 @@ module.exports = function (grunt) {
 			}
 		},
 
-		// run predefined tasks whenever watched file patterns are added, changed or deleted.
-		watch: {
-			// by default, if Gruntfile.js is being watched, then changes to it will trigger the watch task to restart
-			gruntfile: {
-				files: ["Gruntfile.js"]
-			},
-			scripts: {
-				files: ["<%= config.src %>/**/*.js"],
-				tasks: ["eslint"]
-			},
-			testScripts: {
-				files: ["<%= config.test %>/**/*.js"],
-				tasks: ["test"] // registered test task - basically run mocha
-			}
-		},
-
-		// start browserSync web server - for unit testing only
-		// https://github.com/Browsersync/recipes
-		// http://www.browsersync.io/docs/options/
-		browserSync: {
-			options: {
-				notify: false, // don't show any ui notifications in the browser.
-				background: true
-			},
-			fromTest: {
-				options: {
-					port: config.browserSync.testPort,
-					host: config.browserSync.testHost,
-					open: false,
-					server: {
-						baseDir: [config.temp, config.test, config.src],
-						routes: config.routes // The key - url to match :  value - which folder to serve (relative to current directory)
-					}
-				}
-			}
-		},
-
 		// validate javascript
 		eslint: {
 			options: {
@@ -215,38 +178,41 @@ module.exports = function (grunt) {
 				"Gruntfile.js",
 				"<%= config.src %>/**/*.js",
 				"<%= config.test %>/**/*.js",
-				"!**/<%= config.bower.directory %>/**/*.js"
+				"!<%= config.bower.directory %>/**/*.js"
 			]
 		},
 
-		// mocha unit test configurations
-		mocha: {
-			task: {
-				options: {
-					run: true, // inject mocha run code to html. i.e. mocha.run(); into following url page
-					// urls to test via browserSync server
-					urls: ["http://<%= browserSync.fromTest.options.host %>:<%= browserSync.fromTest.options.port %>/index.html"]
-				},
-				dest: "<%= config.temp %>/mocha.out" // test report
+		// test unit tests in browser
+		karma: {
+			unit: {
+				configFile: "karma.conf.js",
+				files: [
+					{src: ["<%= config.bower.directory %>/**/*.js"]},
+					{src: ["<%= config.src %>/fsm4js-core/fsm4js-core.js"]},
+					{src: ["<%= config.src %>/**/*.js"]},
+					{src: ["<%= config.test %>/**/*.js"]}
+				]
 			}
 		}
 	});
 
 	// usage: grunt test
 	grunt.registerTask("test", function () {
-		grunt.task.run([
-			"clean:temp",
-			"browserSync:fromTest",
-			"mocha"
-		]);
+		if (grunt.option["coverage"]) {
+			grunt.config("karma.unit.preprocessors", {
+				"<%= config.src %>/**/*.js": "coverage"
+			});
+			grunt.config("karma.unit.singleRun", true);
+		}
+		grunt.task.run(["karma"]);
 	});
 
 	// usage
-	// grunt package               - package for production. Concat and minify based on settings provided in .zahrawirc
-	// grunt package --concat      - Overrides settings provided in .zahrawirc
-	// grunt package --minify      - Overrides settings provided in .zahrawirc
-	// grunt package --no-concat   - Overrides settings provided in .zahrawirc
-	// grunt package --no-minify   - Overrides settings provided in .zahrawirc
+	// grunt package                 - package for production. Concat and minify based on settings provided in .zahrawirc
+	// grunt package --concat-js     - Overrides settings provided in .zahrawirc
+	// grunt package --minify-js     - Overrides settings provided in .zahrawirc
+	// grunt package --no-concat-js  - Overrides settings provided in .zahrawirc
+	// grunt package --no-minify-js  - Overrides settings provided in .zahrawirc
 	grunt.registerTask("package", function () {
 		// do configs
 		var options = [
