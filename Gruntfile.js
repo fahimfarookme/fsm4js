@@ -198,7 +198,7 @@ module.exports = function (grunt) {
 
 	// usage: grunt test
 	grunt.registerTask("test", function () {
-		if (grunt.option["coverage"]) {
+		if (grunt.option("coverage")) {
 			grunt.config("karma.unit.preprocessors", {
 				"<%= config.src %>/**/*.js": "coverage"
 			});
