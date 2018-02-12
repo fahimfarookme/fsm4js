@@ -4,8 +4,9 @@
   "description": "A declarative Finite State Machine library for JavaScript",
   "main": "fsm4js.min.js",
   "scripts": {
-    "build": "npm install && grunt package",
-    "test": "grunt test --coverage"
+    "build": "grunt package",
+    "test": "grunt test --coverage",
+    "codecov": "codecov"
   },
   "repository": {
     "type": "git",

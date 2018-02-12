@@ -1,9 +1,12 @@
 language: node_js
 node_js:
-  - "node"
   - "8"
-before_script:
-  - npm install -g bower
-  - bower install
-  - npm install -g grunt
-
+before_install:
+  - chmod +x install.sh
+install:
+  - ./install.sh
+script:
+  - npm run build
+  - npm test
+after_success:
+  - npm run codecov
