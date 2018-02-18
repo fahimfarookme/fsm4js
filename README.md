@@ -1,7 +1,7 @@
 [![Build Status](https://travis-ci.org/fahimfarookme/fsm4js.svg?branch=master)](https://travis-ci.org/fahimfarookme/fsm4js)
 [![codecov](https://codecov.io/gh/fahimfarookme/fsm4js/branch/master/graph/badge.svg)](https://codecov.io/gh/fahimfarookme/fsm4js)
 
-# A declarative Finite State Machine library for JavaScript
+# A declarative Finite State Machine for JavaScript
 
 A Finite State Machine which 
 - is declarative
@@ -14,7 +14,7 @@ A Finite State Machine which
 
 ![alt text](https://martinfowler.com/bliki/images/circuitBreaker/state.png)
 
-This could be modeled as follows (thresholds are omitted for the sake of simplicity).
+The above state machine could be modeled as follows (thresholds are omitted for the sake of simplicity).
 
 ```javascript
 var fsm = FSM4JS.fsm()
@@ -36,7 +36,28 @@ var fsm = FSM4JS.fsm()
   .start();
 ```
 
-Please find a demo of the same [here](https://github.com/fahimfarookme/fsm4js/blob/master/demo/index.html).
+You can find a demo of the same [here](https://github.com/fahimfarookme/fsm4js/blob/master/demo/index.html).
+
+## Install
+FSM4JS is available for both node and browser.
+
+- Browser
+```
+bower install fsm4js
+```
+
+- Node
+```
+npm install fsm4js
+```
+
+## Create a Finite State Machine
+Use the `fsm()` factory method to create a new Finite State Machine.
+```javascript
+var fsm = FSM4JS.fsm();
+```
+FSM4JS exposes fluent APIs so that the entire Finite State Machine can be built in a single statement.
+
 
 ## Fire events with data
 The events declared under `.events(["success", "fail", "timeout"])` could be programmatically fired as follows.
@@ -59,7 +80,7 @@ fsm.current();
 
 ## Execute code upon entering and exiting a state
 ```javascript
-.on("open", {
+fsm.on("open", {
     enter: function (options) {
       // options.from    -> entering 'open' state from which state?
       // options.event   -> what event caused to enter into this state
@@ -76,13 +97,13 @@ fsm.current();
 ## Hooks around state transitions
 Get some code executed before entering or after exiting any state
 ```javascript
-.beforeEnter(function(options) {
+fsm.beforeEnter(function(options) {
   // options.from    -> going to enter some state from 'from' state
   // options.event   -> what event caused the state transition
 })
 ```
 ```javascript
-.afterExit(function(options) {
+fsm.afterExit(function(options) {
   // options.from    -> going to exit from 'from' state
   // options.event   -> what event caused the state transition
   // options.to.data -> data being passed during state transition
