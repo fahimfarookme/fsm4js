@@ -8,42 +8,21 @@
 (function (fsm4js) {
 
 	// private members - static
-	var throwError = function (msg) {
-			throw new Error(msg);
-		},
-
-		isArray = function (obj) {
-			return Object.prototype.toString.call(obj) === "[object Array]";
-		},
-
-		isString = function (obj) {
-			return typeof obj === "string";
-		},
-
-		isFunction = function (obj) {
-			return typeof obj === "function";
-		},
-
-		isValidTransition = function (event, eventArr, stateArr) {
+	var isValidTransition = function (event, eventArr, stateArr) {
 			return event &&
-				isString(event.event) &&
-				isString(event.from) &&
+				fsm4js._util.isString(event.event) &&
+				fsm4js._util.isString(event.from) &&
 				eventArr.indexOf(event.event) !== -1 &&
 				stateArr.indexOf(event.from) !== -1;
 		},
 
 		isValidState = function (state, stateArr) {
-			return isString(state) && stateArr.indexOf(state) !== -1;
+			return fsm4js._util.isString(state) && stateArr.indexOf(state) !== -1;
 		},
 
 		isValidLifecycle = function (lifecycle) {
-			return lifecycle && isFunction(lifecycle.enter);
-		},
-
-		safeGet = function (obj, prop) {
-			return obj && obj[prop];
+			return lifecycle && fsm4js._util.isFunction(lifecycle.enter);
 		};
-
 
 	// constructor
 	var builder = function () {
@@ -75,7 +54,7 @@
 				return this._states;
 			}
 
-			if (isArray(states) && states.length > 0) {
+			if (fsm4js._util.isArray(states) && states.length > 0) {
 				this._states = this._states.concat(states);
 			} else { // object
 				this._states.push(states);
@@ -85,7 +64,7 @@
 		},
 
 		current: function () {
-			!this._currentState && throwError("No current state since FSM is not yet started.");
+			!this._currentState && fsm4js._util.throwError("No current state since FSM is not yet started.");
 			return this._currentState;
 		},
 
@@ -94,7 +73,7 @@
 				return this._events;
 			}
 
-			if (isArray(events) && events.length > 0) {
+			if (fsm4js._util.isArray(events) && events.length > 0) {
 				this._events = this._events.concat(events);
 			} else { // object
 				this._events.push(events);
@@ -108,7 +87,7 @@
 				return this._transitions;
 			}
 
-			if (isArray(trns) && trns.length > 0) {
+			if (fsm4js._util.isArray(trns) && trns.length > 0) {
 				for (var i = 0, len = trns.length; i < len; i++) {
 					this._addTransition(trns[i]);
 				}
@@ -120,8 +99,8 @@
 		},
 
 		on: function (state, lifecycle) {
-			!isValidState(state, this._states) && throwError("Invalid state - " + state);
-			!isValidLifecycle(lifecycle) && throwError("Invalid lifecycle { enter, exit } - " + lifecycle);
+			!isValidState(state, this._states) && fsm4js._util.throwError("Invalid state - " + state);
+			!isValidLifecycle(lifecycle) && fsm4js._util.throwError("Invalid lifecycle { enter, exit } - " + lifecycle);
 			this._stateMap[state] = lifecycle;
 
 			return this;
@@ -130,8 +109,8 @@
 		start: function (data, state) { // state is optional
 			state && this.init(state);
 
-			!this._initState && throwError("No init state set.");
-			!isValidState(this._initState.state, this._states) && throwError("Invalid init state - ", this._initState.state);
+			!this._initState && fsm4js._util.throwError("No init state set.");
+			!isValidState(this._initState.state, this._states) && fsm4js._util.throwError("Invalid init state - ", this._initState.state);
 
 			// set data again if no state param provided.
 			this._initState.data = data;
@@ -143,7 +122,7 @@
 		},
 
 		transitionTo: function (state, data) {
-			!isValidState(state, this._states) && throwError("Invalid state - " + state);
+			!isValidState(state, this._states) && fsm4js._util.throwError("Invalid state - " + state);
 			this._exitCurrentState();
 			this._enterNextState(null, state, data);
 
@@ -151,7 +130,7 @@
 		},
 
 		beforeEnter: function (fn, context) {
-			!isFunction(fn) && throwError("Invalid function for beforeEnter");
+			!fsm4js._util.isFunction(fn) && fsm4js._util.throwError("Invalid function for beforeEnter");
 
 			this._beforeEnter = {
 				fn: fn,
@@ -162,7 +141,7 @@
 		},
 
 		afterExit: function (fn, context) {
-			!isFunction(fn) && throwError("Invalid function for afterExit");
+			!fsm4js._util.isFunction(fn) && fsm4js._util.throwError("Invalid function for afterExit");
 
 			this._afterExit = {
 				fn: fn,
@@ -175,7 +154,7 @@
 		_addTransition: function (trns) {
 			// trnas ==> { event:'', from:'', to:'' }
 			// tr-map[from-state][event] => to
-			!isValidTransition(trns, this._events, this._states) && throwError("Invalid transition - " + trns);
+			!isValidTransition(trns, this._events, this._states) && fsm4js._util.throwError("Invalid transition - " + trns);
 
 			this._transitions[trns.from] = this._transitions[trns.from] || {};
 			this._transitions[trns.from][trns.event] = trns.to || this._transitions[trns.from][trns.event] || {};
@@ -217,7 +196,7 @@
 			this._beforeEnter.fn && this._beforeEnter.fn.call(this._beforeEnter._context, options);
 
 			// exit previous state
-			var exit = safeGet(this._stateMap[this._previousState.state], "exit");
+			var exit = fsm4js._util.safeGet(this._stateMap[this._previousState.state], "exit");
 			exit && exit(options);
 			// exit(from, event)
 
@@ -227,7 +206,7 @@
 			// find next state
 			// { s1: { e1: "s1", e2: "s2" }, ... }
 			var from = this._transitions[this._previousState.state];
-			!from && throwError("From state not defined - " + this._previousState.state);
+			!from && fsm4js._util.throwError("From state not defined - " + this._previousState.state);
 			return from[event]; // null for init/ start
 		},
 
@@ -245,7 +224,7 @@
 			};
 
 			// enter next state
-			var enter = safeGet(this._stateMap[this._currentState.state], "enter");
+			var enter = fsm4js._util.safeGet(this._stateMap[this._currentState.state], "enter");
 			enter && enter(options);
 			// enter(from, event, to)
 
