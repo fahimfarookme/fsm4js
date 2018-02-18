@@ -49,6 +49,7 @@
 	var builder = function () {
 		this._initState = null;
 		this._currentState = null;
+		this._previousState = null;
 		this._states = [];
 		this._stateMap = {};
 		this._events = [];
@@ -119,7 +120,7 @@
 		},
 
 		on: function (state, lifecycle) {
-			!isValidState(state, this._states) && throwError("Invalid state - ", state);
+			!isValidState(state, this._states) && throwError("Invalid state - " + state);
 			!isValidLifecycle(lifecycle) && throwError("Invalid lifecycle { enter, exit } - " + lifecycle);
 			this._stateMap[state] = lifecycle;
 
@@ -142,7 +143,7 @@
 		},
 
 		transitionTo: function (state, data) {
-			!isValidState(state, this._states) && throwError("Invalid state - ", state);
+			!isValidState(state, this._states) && throwError("Invalid state - " + state);
 			this._exitCurrentState();
 			this._enterNextState(null, state, data);
 
@@ -174,7 +175,7 @@
 		_addTransition: function (trns) {
 			// trnas ==> { event:'', from:'', to:'' }
 			// tr-map[from-state][event] => to
-			!isValidTransition(trns, this._events, this._states) && throwError("Invalid event - " + trns);
+			!isValidTransition(trns, this._events, this._states) && throwError("Invalid transition - " + trns);
 
 			this._transitions[trns.from] = this._transitions[trns.from] || {};
 			this._transitions[trns.from][trns.event] = trns.to || this._transitions[trns.from][trns.event] || {};
